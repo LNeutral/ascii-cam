@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASCII-CAM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- ── Landing ─────────────────────────────────────────────────────── -->
+  <div id="landing">
+    <div class="landing-content">
+      <div class="landing-logo">
+        <div class="landing-dot"></div>
+        <span class="landing-brand">ASCII-CAM</span>
+      </div>
+      <p class="landing-sub">real-time ascii art from your camera</p>
+      <button id="continue-btn"><span>CONTINUE</span></button>
+    </div>
+    <img src="ascii-bunny.gif" class="landing-bunny" alt="" />
+    <img src="ascii-bunny.gif" class="landing-bunny landing-bunny--right" alt="" />
+  </div>
+
+  <!-- ── Permission prompt ───────────────────────────────────────────── -->
+  <div id="permission" class="hidden">
+    <div class="permission-box">
+      <div class="permission-icon">&#9678;</div>
+      <p class="permission-title">CAMERA ACCESS</p>
+      <p class="permission-sub">ASCII-CAM needs access to your camera to render live ASCII art. No footage is stored or transmitted.</p>
+      <button id="allow-btn"><span>ALLOW CAMERA</span></button>
+      <button id="deny-btn">NO THANKS</button>
+    </div>
+  </div>
+
+  <!-- ── Loading ─────────────────────────────────────────────────────── -->
+  <div id="loading" class="hidden">
+    <div class="loading-content">
+      <span id="loading-spinner">|</span>
+      <span>INITIALIZING CAMERA</span>
+    </div>
+  </div>
+
+  <header>
+    <div class="logo-dot"></div>
+    <h1>ASCII-CAM</h1>
+    <button id="about-btn">ABOUT</button>
+  </header>
+
+  <!-- ── About panel ──────────────────────────────────────────── -->
+  <div id="about-overlay" class="hidden">
+    <div class="about-panel">
+      <div class="about-header">
+        <span class="about-title">/ABOUT</span>
+        <button id="about-close">&times;</button>
+      </div>
+
+      <div class="about-section">
+        <p class="about-label">WHAT IS ASCII-CAM?</p>
+        <p class="about-body">ASCII-CAM converts your live camera feed into real-time ASCII art — mapping each pixel's brightness to a character from a dense ramp, from light spaces to heavy symbols. No video is stored or sent anywhere; everything runs locally in your browser.</p>
+      </div>
+
+      <div class="about-divider"></div>
+
+      <div class="about-section">
+        <p class="about-label">MEDIAPIPE SELFIE SEGMENTATION</p>
+        <p class="about-body">The <span class="about-mono">CUTOUT</span> feature is powered by Google's <span class="about-mono">@mediapipe/selfie_segmentation</span> — a lightweight on-device ML model that isolates a person from the background in real time. It runs entirely in the browser via WebAssembly and WebGL; no data leaves your device.</p>
+        <a class="about-link" href="https://chuoling.github.io/mediapipe/solutions/selfie_segmentation.html" target="_blank" rel="noopener noreferrer">mediapipe docs &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-title">/SETTINGS</div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-row">
+          <span class="sidebar-label">COLUMNS</span>
+          <span class="slider-val" id="cols-val">160</span>
+        </div>
+        <input type="range" id="cols-slider" min="40" max="220" value="160" step="5" />
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-row">
+          <span class="sidebar-label">FONT SIZE</span>
+          <span class="slider-val" id="size-val">8</span>
+        </div>
+        <input type="range" id="size-slider" min="4" max="14" value="8" step="1" />
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-row">
+          <span class="sidebar-label">CONTRAST</span>
+          <span class="slider-val" id="contrast-val">1.2</span>
+        </div>
+        <input type="range" id="contrast-slider" min="0.5" max="3" value="1.2" step="0.1" />
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <button class="toggle-btn" id="invert-btn">INVERT</button>
+      <button class="toggle-btn" id="cutout-btn" disabled title="Loading model…">CUTOUT</button>
+      <button class="toggle-btn" id="pastel-btn">PASTEL</button>
+      <button class="toggle-btn" id="camera-btn">CAMERA</button>
+    </aside>
+
+    <div class="ascii-area">
+      <div class="status">
+        <div class="status-dot" id="status-dot"></div>
+        <span id="status-text">Requesting camera…</span>
+      </div>
+      <div id="ascii-wrap">
+        <pre id="ascii-output">Waiting for camera access…</pre>
+        <span class="site-footer">©01101100</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="camera-widget">
+    <div class="cam-titlebar">
+      <span class="cam-title">CAM.HTML</span>
+      <div class="cam-controls">
+        <span class="cam-dots">•••</span>
+      </div>
+    </div>
+    <video id="video" autoplay playsinline muted></video>
+  </div>
+
+  <canvas id="canvas"></canvas>
+  <canvas id="mask-canvas"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>
