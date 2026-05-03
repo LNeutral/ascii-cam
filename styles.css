@@ -649,7 +649,7 @@ video, canvas { display: none; }
   position: absolute;
   bottom: 0;
   left: 1.5rem;
-  height: 300px;
+  height: 440px;
   width: auto;
   pointer-events: none;
   user-select: none;
